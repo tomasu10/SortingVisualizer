@@ -29,6 +29,12 @@ export default class SortingVisualizer extends React.Component {
 
   resetArray() {
     const array = [];
+    if(this.state.array){
+      const arrayBars = document.getElementsByClassName('array-bar');
+      for(let i =0 ;i<arrayBars.length;i++){
+        arrayBars[i].style.backgroundColor = constants.PRIMARY_COLOR;
+      }
+    }
     for (let i = 0; i < constants.NUM_OF_ARRAY_BARS; i++) {
       array.push(randomIntFromInterval(5, 500));
     }
@@ -41,6 +47,7 @@ export default class SortingVisualizer extends React.Component {
     const animations = getMergeSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
     mergeSortAnimationHandler(animations,arrayBars);
+    finishedSort(animations.length,arrayBars);
 
   }
 
@@ -49,6 +56,7 @@ export default class SortingVisualizer extends React.Component {
     const animations = getQuickSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
     quickSortAnimationHandler(animations,arrayBars);
+    finishedSort(animations.length,arrayBars);
     
   }
 
@@ -57,6 +65,7 @@ export default class SortingVisualizer extends React.Component {
     const animations = getSelectionSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
     selectionSortAnimationHandler(animations,arrayBars);
+    finishedSort(animations.length,arrayBars);
     
   }
 
@@ -65,6 +74,7 @@ export default class SortingVisualizer extends React.Component {
     const animations = getBubbleSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
     bubbleSortAnimationHandler(animations,arrayBars);
+    finishedSort(animations.length,arrayBars);
     
 
   }
@@ -149,4 +159,14 @@ function arraysAreEqual(arrayOne, arrayTwo) {
     }
   }
   return true;
+}
+
+function finishedSort(length,arrayBars){
+  setTimeout(() => {
+    
+    for(let i =0 ;i<arrayBars.length;i++){
+      arrayBars[i].style.backgroundColor = constants.SUCCESS_COLOR;
+    }
+    //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms. Delay must be adjusted by animationSpeed/3 to account for the changes in speeds
+  },(constants.ANIMATION_SPEED_MS) *(length));
 }
