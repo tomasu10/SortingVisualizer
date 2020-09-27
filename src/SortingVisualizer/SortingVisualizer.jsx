@@ -39,8 +39,15 @@ export default class SortingVisualizer extends React.Component {
       array.push(randomIntFromInterval(5, 500));
     }
    this.setState({ array });
-  //  const arr = [10,5,500,25];
-  //  this.setState({arr});
+
+  }
+
+  toggleButtons(length){
+    this.setState({waitForClick:true});
+    setTimeout(() => {
+      this.setState({waitForClick:false});
+      //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms
+    },(constants.ANIMATION_SPEED_MS) *(length));
   }
 
   mergeSort() {
@@ -48,6 +55,7 @@ export default class SortingVisualizer extends React.Component {
     const arrayBars = document.getElementsByClassName('array-bar');
     mergeSortAnimationHandler(animations,arrayBars);
     finishedSort(animations.length,arrayBars);
+    this.toggleButtons(animations.length);
 
   }
 
@@ -57,6 +65,7 @@ export default class SortingVisualizer extends React.Component {
     const arrayBars = document.getElementsByClassName('array-bar');
     quickSortAnimationHandler(animations,arrayBars);
     finishedSort(animations.length,arrayBars);
+    this.toggleButtons(animations.length);
     
   }
 
@@ -66,6 +75,7 @@ export default class SortingVisualizer extends React.Component {
     const arrayBars = document.getElementsByClassName('array-bar');
     selectionSortAnimationHandler(animations,arrayBars);
     finishedSort(animations.length,arrayBars);
+    this.toggleButtons(animations.length);
     
   }
 
@@ -75,6 +85,7 @@ export default class SortingVisualizer extends React.Component {
     const arrayBars = document.getElementsByClassName('array-bar');
     bubbleSortAnimationHandler(animations,arrayBars);
     finishedSort(animations.length,arrayBars);
+    this.toggleButtons(animations.length);
     
 
   }
@@ -123,22 +134,22 @@ export default class SortingVisualizer extends React.Component {
         <div className= 'array-sizes'>
           <h4>Array Size</h4>
           <label htmlFor="small">Small:</label>
-          <input  name="array-size" id="small" type="radio" value="small" onChange={this.adjustArraySize}></input>
+          <input disabled = {this.state.waitForClick} name="array-size" id="small" type="radio" value="small" onChange={this.adjustArraySize}></input>
           <label htmlFor="medium">Medium:</label>
-          <input  name="array-size" id="medium" type="radio" value="medium" 
+          <input disabled = {this.state.waitForClick} name="array-size" id="medium" type="radio" value="medium" 
           onChange={this.adjustArraySize}></input>
           <label htmlFor="large">Large:</label>
-          <input  name="array-size" id="large" type="radio" value="large" onChange={this.adjustArraySize}></input>
+          <input disabled = {this.state.waitForClick} name="array-size" id="large" type="radio" value="large" onChange={this.adjustArraySize}></input>
         </div>
         <div className = 'array-sorting-speeds'>
           <h4>Sorting Speeds</h4>
           <label htmlFor="slow">Slow:</label>
-          <input  name="sorting-speed" id="slow" type="radio" value="slow" onChange={this.adjustSortingSpeed}></input>
+          <input disabled = {this.state.waitForClick} name="sorting-speed" id="slow" type="radio" value="slow" onChange={this.adjustSortingSpeed}></input>
           <label htmlFor="normal">Normal:</label>
-          <input  name="sorting-speed" id="normal" type="radio" value="normal" 
+          <input disabled = {this.state.waitForClick} name="sorting-speed" id="normal" type="radio" value="normal" 
           onChange={this.adjustSortingSpeed}></input>
           <label htmlFor="fast">Fast:</label>
-          <input  name="sorting-speed" id="fast" type="radio" value="fast" onChange={this.adjustSortingSpeed}></input>
+          <input disabled = {this.state.waitForClick} name="sorting-speed" id="fast" type="radio" value="fast" onChange={this.adjustSortingSpeed}></input>
         </div>
       </div>
     );
