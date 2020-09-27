@@ -2,7 +2,7 @@
 export function getQuickSortAnimations(array) {
     const animations = [];
     quickSort(array, 0, array.length-1, animations);
-    return [animations,array];
+    return animations;
   }
 
 
