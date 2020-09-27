@@ -1,5 +1,5 @@
 import constants from '../constants'
-export function mergeSortAnimationHandler(animations,arrayBars){
+export function mergeSortAnimationHandler(animations,arrayBars,animationSpeed){
     for (let i = 0; i < animations.length; i++) {
         const isColorChange = i % 3 !== 2;
         if (isColorChange) {
@@ -10,13 +10,13 @@ export function mergeSortAnimationHandler(animations,arrayBars){
           setTimeout(() => {
             barOneStyle.backgroundColor = color;
             barTwoStyle.backgroundColor = color;
-          }, i * constants.ANIMATION_SPEED_MS);
+          }, i * animationSpeed);
         } else {
           setTimeout(() => {
             const [barOneIdx, newHeight] = animations[i];
             const barOneStyle = arrayBars[barOneIdx].style;
             barOneStyle.height = `${newHeight}px`;
-          }, i * constants.ANIMATION_SPEED_MS);
+          }, i * animationSpeed);
         }
       }
 }

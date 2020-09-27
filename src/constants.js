@@ -2,7 +2,7 @@ const constants =  {
    
     ANIMATION_SPEED_MS : 3,
 
-    NUM_OF_ARRAY_BARS: 20,
+    NUM_OF_ARRAY_BARS: 100,
     //Additional delay
     ADDED_DELAY : 100,
 

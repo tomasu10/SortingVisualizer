@@ -1,6 +1,6 @@
 import constants from '../constants';
 
-export function selectionSortAnimationHandler(animations,arrayBars){
+export function selectionSortAnimationHandler(animations,arrayBars,animationSpeed){
     let toSecondaryColor = true;
     let toTertiaryColor = true;
     for (let i = 0; i < animations.length; i++) {
@@ -20,7 +20,7 @@ export function selectionSortAnimationHandler(animations,arrayBars){
         setTimeout(() => {
           barOneStyle.backgroundColor = color1;
           barTwoStyle.backgroundColor = color2;
-        }, i * constants.ANIMATION_SPEED_MS);
+        }, i * animationSpeed);
       } else {
         //Swap Made
         toSecondaryColor = false;
@@ -36,7 +36,7 @@ export function selectionSortAnimationHandler(animations,arrayBars){
           const tempBackgroundColor = barOneStyle.backgroundColor;
           barOneStyle.backgroundColor = barTwoStyle.backgroundColor;
           barTwoStyle.backgroundColor = tempBackgroundColor;
-        }, i * constants.ANIMATION_SPEED_MS);
+        }, i * animationSpeed);
       }
     } 
 

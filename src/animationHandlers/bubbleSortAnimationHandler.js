@@ -1,6 +1,6 @@
 import constants from  '../constants';
 
-export function bubbleSortAnimationHandler(animations,arrayBars){
+export function bubbleSortAnimationHandler(animations,arrayBars,animationSpeed){
     //Variable keeps track of color swaps
     let toSecondaryColor = true;
     for (let i = 0; i < animations.length; i++) {
@@ -18,7 +18,7 @@ export function bubbleSortAnimationHandler(animations,arrayBars){
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * constants.ANIMATION_SPEED_MS);
+        }, i * animationSpeed);
       } else {
         //Swap Made
         toSecondaryColor = false;
@@ -30,7 +30,7 @@ export function bubbleSortAnimationHandler(animations,arrayBars){
           const [barTwoIdx, newHeight2] = animations[i].content2;
           const barTwoStyle = arrayBars[barTwoIdx].style;
           barTwoStyle.height = `${newHeight2}px`;
-        }, i * constants.ANIMATION_SPEED_MS);
+        }, i * animationSpeed);
 
       }
     }

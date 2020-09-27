@@ -19,8 +19,12 @@ export default class SortingVisualizer extends React.Component {
 
     this.state = {
       array: [],
-      waitForClick: false
+      waitForClick: false,
+      numOfArrayBars: 100,
+      animationSpeed : 3
     };
+    this.adjustArraySize = this.adjustArraySize.bind(this);
+    this.adjustSortingSpeed = this.adjustSortingSpeed.bind(this);
   }
 
   componentDidMount() {
@@ -35,27 +39,58 @@ export default class SortingVisualizer extends React.Component {
         arrayBars[i].style.backgroundColor = constants.PRIMARY_COLOR;
       }
     }
-    for (let i = 0; i < constants.NUM_OF_ARRAY_BARS; i++) {
+    for (let i = 0; i < this.state.numOfArrayBars; i++) {
       array.push(randomIntFromInterval(5, 500));
     }
    this.setState({ array });
 
   }
 
-  toggleButtons(length){
-    this.setState({waitForClick:true});
-    setTimeout(() => {
-      this.setState({waitForClick:false});
-      //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms
-    },(constants.ANIMATION_SPEED_MS) *(length));
+  adjustArraySize(e){
+    let size;
+    console.log(typeof e.target.value);
+    switch(e.target.value){
+      case 'small': size = 10;
+      break;
+      case 'medium' : size = 50;
+      break;
+      case 'large' : size = 100;
+      break;
+      default : size = 20;
+    }
+    this.setState({numOfArrayBars:size},this.resetArray);
+    
+    
   }
+
+  adjustSortingSpeed(e){
+    let speed;
+    switch(e.target.value){
+      case 'slow': speed = 27;
+      break;
+      case 'normal' : speed = 9;
+      break;
+      case 'fast' : speed = 3;
+      break;
+      default : speed = 10;
+    }
+    this.setState({animationSpeed:speed});
+  }
+// //FIX BUG WITH THIS FUNCTION
+//   toggleButtons(length){
+//     this.setState({waitForClick:true});
+//     setTimeout(() => {
+//       this.setState({waitForClick:false});
+//       //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms
+//     },(this.state.animationSpeed) *(length));
+//   }
 
   mergeSort() {
     const animations = getMergeSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
-    mergeSortAnimationHandler(animations,arrayBars);
-    finishedSort(animations.length,arrayBars);
-    this.toggleButtons(animations.length);
+    mergeSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
+    finishedSort(animations.length,arrayBars,this.state.animationSpeed);
+    //this.toggleButtons(animations.length);
 
   }
 
@@ -63,9 +98,9 @@ export default class SortingVisualizer extends React.Component {
     //Determine animations based on sorted array
     const animations = getQuickSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
-    quickSortAnimationHandler(animations,arrayBars);
-    finishedSort(animations.length,arrayBars);
-    this.toggleButtons(animations.length);
+    quickSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
+    finishedSort(animations.length,arrayBars,this.state.animationSpeed);
+    //this.toggleButtons(animations.length);
     
   }
 
@@ -73,9 +108,9 @@ export default class SortingVisualizer extends React.Component {
     //Variable keeps track of color swaps
     const animations = getSelectionSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
-    selectionSortAnimationHandler(animations,arrayBars);
-    finishedSort(animations.length,arrayBars);
-    this.toggleButtons(animations.length);
+    selectionSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
+    finishedSort(animations.length,arrayBars,this.state.animationSpeed);
+    //this.toggleButtons(animations.length);
     
   }
 
@@ -83,9 +118,10 @@ export default class SortingVisualizer extends React.Component {
     //Determine animations based on sorted array
     const animations = getBubbleSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
-    bubbleSortAnimationHandler(animations,arrayBars);
-    finishedSort(animations.length,arrayBars);
-    this.toggleButtons(animations.length);
+    //this.toggleButtons(animations.length);
+    bubbleSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
+    finishedSort(animations.length,arrayBars,this.state.animationSpeed);
+    
     
 
   }
@@ -101,7 +137,7 @@ export default class SortingVisualizer extends React.Component {
         array.push(randomIntFromInterval(-1000, 1000));
       }
       const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-      const [animations,mergeSortedArray] = getQuickSortAnimations(array.slice());
+      const mergeSortedArray = getQuickSortAnimations(array.slice());
       console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
     }
   }
@@ -172,12 +208,12 @@ function arraysAreEqual(arrayOne, arrayTwo) {
   return true;
 }
 
-function finishedSort(length,arrayBars){
+function finishedSort(length,arrayBars,animationSpeed){
   setTimeout(() => {
     
     for(let i =0 ;i<arrayBars.length;i++){
       arrayBars[i].style.backgroundColor = constants.SUCCESS_COLOR;
     }
     //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms. Delay must be adjusted by animationSpeed/3 to account for the changes in speeds
-  },(constants.ANIMATION_SPEED_MS) *(length));
+  },(animationSpeed) *(length));
 }

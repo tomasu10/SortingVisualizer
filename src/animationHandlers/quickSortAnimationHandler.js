@@ -1,5 +1,5 @@
 import constants from '../constants';
-export function quickSortAnimationHandler(animations,arrayBars){
+export function quickSortAnimationHandler(animations,arrayBars,animationSpeed){
     //Variable keeps track of color swaps
     let toSecondaryColor = true;
     let toTertiaryColor = true;
@@ -11,7 +11,7 @@ export function quickSortAnimationHandler(animations,arrayBars){
         const color = toTertiaryColor ? constants.TERTIARY_COLOR : constants.PRIMARY_COLOR;
         setTimeout(() => {
           pivotStyle.backgroundColor = color;
-        }, i * constants.ANIMATION_SPEED_MS);
+        }, i * animationSpeed);
       }
       else{
       //Check to see if the animation encompasses a swap
@@ -31,7 +31,7 @@ export function quickSortAnimationHandler(animations,arrayBars){
             barOneStyle.backgroundColor = color;
             if(barTwoIdx !== animations[i].pivotIdx)
             barTwoStyle.backgroundColor = color;
-          }, i * constants.ANIMATION_SPEED_MS);
+          }, i * animationSpeed);
         } 
         else {
           //Swap Made
@@ -44,7 +44,7 @@ export function quickSortAnimationHandler(animations,arrayBars){
                 const [barTwoIdx, newHeight2] = animations[i].content2;
                 const barTwoStyle = arrayBars[barTwoIdx].style;
                 barTwoStyle.height = `${newHeight2}px`;
-            }, i * constants.ANIMATION_SPEED_MS);
+            }, i * animationSpeed);
         }
         }
     }
