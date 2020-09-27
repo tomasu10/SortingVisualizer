@@ -1,24 +1,11 @@
 import React from 'react';
+import constants from '../constants'
 import { getMergeSortAnimations } from '../sortingAlgorithms/mergeSort.js';
 import { getBubbleSortAnimations } from '../sortingAlgorithms/bubbleSort.js';
 import { getQuickSortAnimations } from '../sortingAlgorithms/quickSort.js';
 import { getSelectionSortAnimations } from '../sortingAlgorithms/selectionSort.js';
 import './SortingVisualizer.css';
 
-// Change this value for the speed of the animations.
-const ANIMATION_SPEED_MS = 3;
-
-// Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 20;
-
-// This is the main color of the array bars.
-const PRIMARY_COLOR = 'turquoise';
-
-// This is the color of array bars that are being compared throughout the animations.
-const SECONDARY_COLOR = 'red';
-
-// This is the color of array bars for quickSort Pivot.
-const TERTIARY_COLOR = 'yellow';
 
 
 export default class SortingVisualizer extends React.Component {
@@ -37,8 +24,8 @@ export default class SortingVisualizer extends React.Component {
 
   resetArray() {
     const array = [];
-    for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
-      array.push(randomIntFromInterval(5, 730));
+    for (let i = 0; i < constants.NUM_OF_ARRAY_BARS; i++) {
+      array.push(randomIntFromInterval(5, 500));
     }
    this.setState({ array });
   //  const arr = [10,5,500,25];
@@ -54,17 +41,17 @@ export default class SortingVisualizer extends React.Component {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
-        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+        const color = i % 3 === 0 ? constants.SECONDARY_COLOR : constants.PRIMARY_COLOR;
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * constants.ANIMATION_SPEED_MS);
       } else {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * constants.ANIMATION_SPEED_MS);
       }
     }
   }
@@ -82,10 +69,10 @@ export default class SortingVisualizer extends React.Component {
       if (animations[i].pivotElement) {
         const pivot = animations[i].content;
         const pivotStyle = arrayBars[pivot].style;
-        const color = toTertiaryColor ? TERTIARY_COLOR : PRIMARY_COLOR;
+        const color = toTertiaryColor ? constants.TERTIARY_COLOR : constants.PRIMARY_COLOR;
         setTimeout(() => {
           pivotStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * constants.ANIMATION_SPEED_MS);
       }
       else{
       //Check to see if the animation encompasses a swap
@@ -97,7 +84,7 @@ export default class SortingVisualizer extends React.Component {
           const barOneStyle = arrayBars[barOneIdx].style;
           const barTwoStyle = arrayBars[barTwoIdx].style;
           //Change colors of bars depending on the previous color
-          const color = toSecondaryColor ? SECONDARY_COLOR : PRIMARY_COLOR;
+          const color = toSecondaryColor ? constants.SECONDARY_COLOR : constants.PRIMARY_COLOR;
           toSecondaryColor = toSecondaryColor ? false : true;
           //Change color of compared bars on a timer
           setTimeout(() => {
@@ -105,7 +92,7 @@ export default class SortingVisualizer extends React.Component {
             barOneStyle.backgroundColor = color;
             if(barTwoIdx !== animations[i].pivotIdx)
             barTwoStyle.backgroundColor = color;
-          }, i * ANIMATION_SPEED_MS);
+          }, i * constants.ANIMATION_SPEED_MS);
         } 
         else {
           //Swap Made
@@ -118,7 +105,7 @@ export default class SortingVisualizer extends React.Component {
             const [barTwoIdx, newHeight2] = animations[i].content2;
             const barTwoStyle = arrayBars[barTwoIdx].style;
             barTwoStyle.height = `${newHeight2}px`;
-          }, i * ANIMATION_SPEED_MS);
+          }, i * constants.ANIMATION_SPEED_MS);
         }
     }
     }
@@ -139,15 +126,15 @@ export default class SortingVisualizer extends React.Component {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         //Change colors of bars depending on the previous color. Find lowest value and change
-        const color1 = toSecondaryColor ? SECONDARY_COLOR : PRIMARY_COLOR;
-        const color2 = toTertiaryColor ? TERTIARY_COLOR : PRIMARY_COLOR;
+        const color1 = toSecondaryColor ? constants.SECONDARY_COLOR : constants.PRIMARY_COLOR;
+        const color2 = toTertiaryColor ? constants.TERTIARY_COLOR : constants.PRIMARY_COLOR;
         toSecondaryColor = toSecondaryColor ? false : true;
         toTertiaryColor = toTertiaryColor ? false : true;
         //Change color of compared bars on a timer
         setTimeout(() => {
           barOneStyle.backgroundColor = color1;
           barTwoStyle.backgroundColor = color2;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * constants.ANIMATION_SPEED_MS);
       } else {
         //Swap Made
         toSecondaryColor = false;
@@ -163,7 +150,7 @@ export default class SortingVisualizer extends React.Component {
           const tempBackgroundColor = barOneStyle.backgroundColor;
           barOneStyle.backgroundColor = barTwoStyle.backgroundColor;
           barTwoStyle.backgroundColor = tempBackgroundColor;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * constants.ANIMATION_SPEED_MS);
       }
     } 
   }
@@ -184,13 +171,13 @@ export default class SortingVisualizer extends React.Component {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         //Change colors of bars depending on the previous color
-        const color = toSecondaryColor ? SECONDARY_COLOR : PRIMARY_COLOR;
+        const color = toSecondaryColor ? constants.SECONDARY_COLOR : constants.PRIMARY_COLOR;
         toSecondaryColor = toSecondaryColor ? false : true;
         //Change color of compared bars on a timer
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * constants.ANIMATION_SPEED_MS);
       } else {
         //Swap Made
         toSecondaryColor = false;
@@ -202,7 +189,7 @@ export default class SortingVisualizer extends React.Component {
           const [barTwoIdx, newHeight2] = animations[i].content2;
           const barTwoStyle = arrayBars[barTwoIdx].style;
           barTwoStyle.height = `${newHeight2}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * constants.ANIMATION_SPEED_MS);
 
       }
     }
@@ -230,12 +217,13 @@ export default class SortingVisualizer extends React.Component {
 
     return (
       <div className="array-container">
+        <h1>Sorting Visualizer</h1>
         {array.map((value, idx) => (
           <div
             className="array-bar"
             key={idx}
             style={{
-              backgroundColor: PRIMARY_COLOR,
+              backgroundColor: constants.PRIMARY_COLOR,
               height: `${value}px`,
             }}></div>
         ))}
@@ -248,6 +236,26 @@ export default class SortingVisualizer extends React.Component {
           {/* <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.testSortingAlgorithms()}>
             Test Sorting Algorithms
           </button> */}
+        </div>
+        <div className= 'array-sizes'>
+          <h4>Array Size</h4>
+          <label htmlFor="small">Small:</label>
+          <input  name="array-size" id="small" type="radio" value="small" onChange={this.adjustArraySize}></input>
+          <label htmlFor="medium">Medium:</label>
+          <input  name="array-size" id="medium" type="radio" value="medium" 
+          onChange={this.adjustArraySize}></input>
+          <label htmlFor="large">Large:</label>
+          <input  name="array-size" id="large" type="radio" value="large" onChange={this.adjustArraySize}></input>
+        </div>
+        <div className = 'array-sorting-speeds'>
+          <h4>Sorting Speeds</h4>
+          <label htmlFor="slow">Slow:</label>
+          <input  name="sorting-speed" id="slow" type="radio" value="slow" onChange={this.adjustSortingSpeed}></input>
+          <label htmlFor="normal">Normal:</label>
+          <input  name="sorting-speed" id="normal" type="radio" value="normal" 
+          onChange={this.adjustSortingSpeed}></input>
+          <label htmlFor="fast">Fast:</label>
+          <input  name="sorting-speed" id="fast" type="radio" value="fast" onChange={this.adjustSortingSpeed}></input>
         </div>
       </div>
     );
