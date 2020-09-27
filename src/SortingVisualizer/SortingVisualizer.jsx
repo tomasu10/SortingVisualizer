@@ -2,13 +2,14 @@ import React from 'react';
 import { getMergeSortAnimations } from '../sortingAlgorithms/mergeSort.js';
 import { getBubbleSortAnimations } from '../sortingAlgorithms/bubbleSort.js';
 import { getQuickSortAnimations } from '../sortingAlgorithms/quickSort.js';
+import { getSelectionSortAnimations } from '../sortingAlgorithms/selectionSort.js';
 import './SortingVisualizer.css';
 
 // Change this value for the speed of the animations.
 const ANIMATION_SPEED_MS = 3;
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 100;
+const NUMBER_OF_ARRAY_BARS = 20;
 
 // This is the main color of the array bars.
 const PRIMARY_COLOR = 'turquoise';
@@ -123,8 +124,48 @@ export default class SortingVisualizer extends React.Component {
     }
   }
 
-  heapSort() {
-    // We leave it as an exercise to the viewer of this code to implement this method.
+  selectionSort() {
+    //Variable keeps track of color swaps
+    const animations = getSelectionSortAnimations(this.state.array);
+    const arrayBars = document.getElementsByClassName('array-bar');
+    let toSecondaryColor = true;
+    let toTertiaryColor = true;
+    for (let i = 0; i < animations.length; i++) {
+      //Check to see if the animation encompasses a swap
+      if (!animations[i].swap) {
+        //No swap made
+        // Select bars which are being compared
+        const [barOneIdx, barTwoIdx] = animations[i].content;
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        //Change colors of bars depending on the previous color. Find lowest value and change
+        const color1 = toSecondaryColor ? SECONDARY_COLOR : PRIMARY_COLOR;
+        const color2 = toTertiaryColor ? TERTIARY_COLOR : PRIMARY_COLOR;
+        toSecondaryColor = toSecondaryColor ? false : true;
+        toTertiaryColor = toTertiaryColor ? false : true;
+        //Change color of compared bars on a timer
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color1;
+          barTwoStyle.backgroundColor = color2;
+        }, i * ANIMATION_SPEED_MS);
+      } else {
+        //Swap Made
+        toSecondaryColor = false;
+        toTertiaryColor = false;
+        //Change bar height according to swaps made
+        setTimeout(() => {
+          const [barOneIdx, newHeight1] = animations[i].content1;
+          const barOneStyle = arrayBars[barOneIdx].style;
+          barOneStyle.height = `${newHeight1}px`;
+          const [barTwoIdx, newHeight2] = animations[i].content2;
+          const barTwoStyle = arrayBars[barTwoIdx].style;
+          barTwoStyle.height = `${newHeight2}px`;
+          const tempBackgroundColor = barOneStyle.backgroundColor;
+          barOneStyle.backgroundColor = barTwoStyle.backgroundColor;
+          barTwoStyle.backgroundColor = tempBackgroundColor;
+        }, i * ANIMATION_SPEED_MS);
+      }
+    } 
   }
 
   bubbleSort() {
@@ -198,14 +239,16 @@ export default class SortingVisualizer extends React.Component {
               height: `${value}px`,
             }}></div>
         ))}
-        <button onClick={() => this.resetArray()}>Generate New Array</button>
-        <button onClick={() => this.mergeSort()}>Merge Sort</button>
-        <button onClick={() => this.quickSort()}>Quick Sort</button>
-        <button onClick={() => this.heapSort()}>Heap Sort</button>
-        <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-        <button onClick={() => this.testSortingAlgorithms()}>
-          Test Sorting Algorithms
-        </button>
+        <div>
+          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.resetArray()}>Generate New Array</button>
+          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.mergeSort()}>Merge Sort</button>
+          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.quickSort()}>Quick Sort</button>
+          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.selectionSort()}>Selection Sort</button>
+          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.bubbleSort()}>Bubble Sort</button>
+          {/* <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.testSortingAlgorithms()}>
+            Test Sorting Algorithms
+          </button> */}
+        </div>
       </div>
     );
   }
