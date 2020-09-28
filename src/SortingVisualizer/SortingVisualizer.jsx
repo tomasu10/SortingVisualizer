@@ -133,7 +133,7 @@ export default class SortingVisualizer extends React.Component {
 
     return (
       <div className="array-container">
-        <h1>Sorting Visualizer</h1>
+        <h1>Sorting Visualizer <i class="fas fa-sort-amount-up"></i></h1>
         {array.map((value, idx) => (
           <div
             className="array-bar"
@@ -197,6 +197,6 @@ function finishedSort(length,arrayBars,animationSpeed){
     for(let i =0 ;i<arrayBars.length;i++){
       arrayBars[i].style.backgroundColor = constants.SUCCESS_COLOR;
     }
-    //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms. Delay must be adjusted by animationSpeed/3 to account for the changes in speeds
+    //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms. 
   },(animationSpeed *length)+constants.ADDED_DELAY);
 }
