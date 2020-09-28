@@ -19,7 +19,6 @@ export default class SortingVisualizer extends React.Component {
 
     this.state = {
       array: [],
-      waitForClick: false,
       numOfArrayBars: 100,
       animationSpeed : 3
     };
@@ -65,6 +64,21 @@ export default class SortingVisualizer extends React.Component {
     
   }
 
+    disableSortingButtons(){
+      const sortingElements = document.getElementsByClassName('sorting');
+      for(const element of sortingElements){
+        element.disabled = true;
+      }
+    }
+
+    restoreSortingButtons(animationSpeed,length){
+      const sortingElements = document.getElementsByClassName('sorting');
+      setTimeout(()=>{
+        for(const element of sortingElements){
+          element.disabled = false;
+        }
+      },animationSpeed*length+constants.ADDED_DELAY);
+    }
 
 // //FIX BUG WITH THIS FUNCTION
 //   toggleButtons(length){
@@ -108,8 +122,10 @@ export default class SortingVisualizer extends React.Component {
     const animations = getBubbleSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
     //this.toggleButtons(animations.length);
+    this.disableSortingButtons();
     bubbleSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
     finishedSort(animations.length,arrayBars,this.state.animationSpeed);
+    this.restoreSortingButtons(this.state.animationSpeed,animations.length )
   }
 
   // NOTE: This method will only work if your sorting algorithms actually return
@@ -133,7 +149,7 @@ export default class SortingVisualizer extends React.Component {
 
     return (
       <div className="array-container">
-        <h1>Sorting Visualizer <i class="fas fa-sort-amount-up"></i></h1>
+        <h1>Sorting Visualizer <i className="fas fa-sort-amount-up"></i></h1>
         {array.map((value, idx) => (
           <div
             className="array-bar"
@@ -143,12 +159,13 @@ export default class SortingVisualizer extends React.Component {
               height: `${value}px`,
             }}></div>
         ))}
+
         <div>
-          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.resetArray()}>Generate New Array</button>
-          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.mergeSort()}>Merge Sort</button>
-          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.quickSort()}>Quick Sort</button>
-          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.selectionSort()}>Selection Sort</button>
-          <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.bubbleSort()}>Bubble Sort</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.resetArray()}>Generate New Array</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.mergeSort()}>Merge Sort</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.quickSort()}>Quick Sort</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.selectionSort()}>Selection Sort</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.bubbleSort()}>Bubble Sort</button>
           {/* <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.testSortingAlgorithms()}>
             Test Sorting Algorithms
           </button> */}
@@ -157,8 +174,8 @@ export default class SortingVisualizer extends React.Component {
           <h4>Array Size:</h4>
           <form name = 'size-submit' onSubmit={this.handleSubmit}>
             <label htmlFor="array-size"></label>
-            <input  name="array-size" id="array-size" type="number" value= {this.state.numOfArrayBars} min="2.00" max = "100.00" step="1.00" onChange={this.handleChange}></input>
-            <input type="submit" value="Submit" />
+            <input  name="array-size" className = "sorting" id="array-size" type="number" value= {this.state.numOfArrayBars} min="2.00" max = "100.00" step="1.00" onChange={this.handleChange}></input>
+            <input className = "sorting" type="submit" value="Submit" />
           </form>
          
         </div>
@@ -166,8 +183,8 @@ export default class SortingVisualizer extends React.Component {
           <h4>Sorting Speeds</h4>
           <form name = 'speed-submit' onSubmit={this.handleSubmit}>
             <label htmlFor="array-speed"></label>
-            <input  name="array-speed" id="array-speed" type="number" value= {this.state.animationSpeed} min="1.00" max = "27.00" step="1.00" onChange={this.handleChange}></input>
-            <input type="submit" value="Submit" />
+            <input  name="array-speed" className = "sorting" id="array-speed" type="number" value= {this.state.animationSpeed} min="1.00" max = "27.00" step="1.00" onChange={this.handleChange}></input>
+            <input className = "sorting" type="submit" value="Submit" />
           </form>
         </div>
       </div>
