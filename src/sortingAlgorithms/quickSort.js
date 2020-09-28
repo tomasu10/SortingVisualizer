@@ -52,7 +52,7 @@ export function getQuickSortAnimations(array) {
   
   function quickSort(arr, left = 0, right = arr.length -1,animations){
       if(left < right){
-          let pivotIndex = pivot(arr, left, right,animations) //3
+          let pivotIndex = pivot(arr, left, right,animations);
           //left
           quickSort(arr,left,pivotIndex-1,animations);
           //right

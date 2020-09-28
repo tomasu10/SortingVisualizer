@@ -2,7 +2,7 @@
   "name": "sorting-visualizer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/tomasu10/SortingVisualizer.git",
+  "homepage": "http://tomasu10.github.io/SortingVisualizer",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",

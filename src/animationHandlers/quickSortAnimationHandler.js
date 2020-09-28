@@ -4,10 +4,10 @@ export function quickSortAnimationHandler(animations,arrayBars,animationSpeed){
     let toSecondaryColor = true;
     let toTertiaryColor = true;
     for (let i = 0; i < animations.length; i++) {
-      // Store all bars in DOM in variable
       if (animations[i].pivotElement) {
         const pivot = animations[i].content;
         const pivotStyle = arrayBars[pivot].style;
+        //Toggle Tertiary color. 
         const color = toTertiaryColor ? constants.TERTIARY_COLOR : constants.PRIMARY_COLOR;
         setTimeout(() => {
           pivotStyle.backgroundColor = color;

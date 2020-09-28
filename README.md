@@ -1,4 +1,20 @@
+# Sorting Algorithm Visualizer
+### Created by: Tomas Uribe Tobon
+This project is viewable here: [http://tomasu10.github.io/SortingVisualizer](http://tomasu10.github.io/SortingVisualizer)
+## Description
+The purpose of this application is to provide a visual representation of sorting algorithms. This sorting algorithm visualizer is comprised of 4 algorithms: mergeSort, quickSort, bubbleSort, and selectionSort. Two intermediate (merge/quick) and two elementary (bubble/selection) algorithms were chosen in order to allow the user to visualize the differences in speed between each algorithm, especially as the sorting array increases in size. Ultimately, this sorting algorithm visualizer serves as an educational tool which allows the user to fully understand the importance of time complexity and how an algorithm can affect process speed.
+
+## Notable Features
+**Visualization :** This application allows the user to understand sorting algorithms by providing animations for each step in the algorithmic process.
+**Button Disable/Enable :** Once the user selects an algorithm, all buttons on the DOM are disabled. This prevents the user from creating a new array or starting a new sorting method in the middle of another method. All buttons are enabled after the sort is finished.
+
+### Special Thanks
+Thank you to [Clément Mihailescu](https://github.com/clementmihailescu) for the project idea.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+
+***
 
 ## Available Scripts
 

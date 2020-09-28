@@ -8,7 +8,6 @@ import { mergeSortAnimationHandler } from '../animationHandlers/mergeSortAnimati
 import { quickSortAnimationHandler } from '../animationHandlers/quickSortAnimationHandler.js';
 import { selectionSortAnimationHandler } from '../animationHandlers/selectionSortAnimationHandler.js';
 import { bubbleSortAnimationHandler } from '../animationHandlers/bubbleSortAnimationHandler.js';
-
 import './SortingVisualizer.css';
 
 
@@ -32,20 +31,22 @@ export default class SortingVisualizer extends React.Component {
 
   resetArray() {
     const array = [];
+    // Set all array bars back to primary color after sorting
     if(this.state.array){
       const arrayBars = document.getElementsByClassName('array-bar');
       for(let i =0 ;i<arrayBars.length;i++){
         arrayBars[i].style.backgroundColor = constants.PRIMARY_COLOR;
       }
     }
+    //Create new array bars with height of 5-500px
     for (let i = 0; i < this.state.numOfArrayBars; i++) {
       array.push(randomIntFromInterval(5, 500));
     }
    this.setState({ array });
-
   }
 
   handleSubmit(event){
+    //Reset Array if size is changed. Do not reset array if speed is changed
     if(event.target.name === 'size-submit'){
       this.resetArray();
     }
@@ -53,6 +54,7 @@ export default class SortingVisualizer extends React.Component {
   }
 
   handleChange(event) {
+    //Change the value of numArrayBars/animationSpeed as the user types
     if(event.target.name === 'array-size'){
       let size = parseInt(event.target.value);
       this.setState({numOfArrayBars: size});
@@ -65,6 +67,7 @@ export default class SortingVisualizer extends React.Component {
   }
 
     disableSortingButtons(){
+      //Select all buttons and set disabled property to true
       const sortingElements = document.getElementsByClassName('sorting');
       for(const element of sortingElements){
         element.disabled = true;
@@ -72,6 +75,7 @@ export default class SortingVisualizer extends React.Component {
     }
 
     restoreSortingButtons(animationSpeed,length){
+      //Select all buttons and set disabled property to false once sorting is complete
       const sortingElements = document.getElementsByClassName('sorting');
       setTimeout(()=>{
         for(const element of sortingElements){
@@ -80,52 +84,22 @@ export default class SortingVisualizer extends React.Component {
       },animationSpeed*length+constants.ADDED_DELAY);
     }
 
-// //FIX BUG WITH THIS FUNCTION
-//   toggleButtons(length){
-//     this.setState({waitForClick:true});
-//     setTimeout(() => {
-//       this.setState({waitForClick:false});
-//       //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms
-//     },(this.state.animationSpeed) *(length));
-//   }
-
-  mergeSort() {
-    const animations = getMergeSortAnimations(this.state.array);
+  sort(algorithmAnimations, animationsHandler){
+    // Create DOM animations that correspond to sorting algorithm
+    const animations = algorithmAnimations(this.state.array);
+    //Save length of animations array and speed to determine how long alogrithm will take (length * speed)
+    const size = animations.length;
+    const speed = this.state.animationSpeed;
+    //Store all array bars from DOM
     const arrayBars = document.getElementsByClassName('array-bar');
-    mergeSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
-    finishedSort(animations.length,arrayBars,this.state.animationSpeed);
-    //this.toggleButtons(animations.length);
-  }
-
-  quickSort() {
-    //Determine animations based on sorted array
-    const animations = getQuickSortAnimations(this.state.array);
-    const arrayBars = document.getElementsByClassName('array-bar');
-    quickSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
-    finishedSort(animations.length,arrayBars,this.state.animationSpeed);
-    //this.toggleButtons(animations.length);
-    
-  }
-
-  selectionSort() {
-    //Variable keeps track of color swaps
-    const animations = getSelectionSortAnimations(this.state.array);
-    const arrayBars = document.getElementsByClassName('array-bar');
-    selectionSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
-    finishedSort(animations.length,arrayBars,this.state.animationSpeed);
-    //this.toggleButtons(animations.length);
-    
-  }
-
-  bubbleSort() {
-    //Determine animations based on sorted array
-    const animations = getBubbleSortAnimations(this.state.array);
-    const arrayBars = document.getElementsByClassName('array-bar');
-    //this.toggleButtons(animations.length);
+    //Disable all Buttons on DOM
     this.disableSortingButtons();
-    bubbleSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
-    finishedSort(animations.length,arrayBars,this.state.animationSpeed);
-    this.restoreSortingButtons(this.state.animationSpeed,animations.length )
+    //Display animations on DOM
+    animationsHandler(animations,arrayBars,speed);
+    //Set all array bars to green after sort is complete
+    finishedSort(size,arrayBars,speed);
+    //Restore all Buttons on DOM
+    this.restoreSortingButtons(speed,size);
   }
 
   // NOTE: This method will only work if your sorting algorithms actually return
@@ -146,10 +120,9 @@ export default class SortingVisualizer extends React.Component {
 
   render() {
     const { array } = this.state;
-
     return (
       <div className="array-container">
-        <h1>Sorting Visualizer <i className="fas fa-sort-amount-up"></i></h1>
+        <h1>Sorting Algorithm Visualizer <i className="fas fa-sort-amount-up"></i></h1>
         {array.map((value, idx) => (
           <div
             className="array-bar"
@@ -159,13 +132,12 @@ export default class SortingVisualizer extends React.Component {
               height: `${value}px`,
             }}></div>
         ))}
-
         <div>
           <button className = 'array-buttons sorting'  onClick={() => this.resetArray()}>Generate New Array</button>
-          <button className = 'array-buttons sorting'  onClick={() => this.mergeSort()}>Merge Sort</button>
-          <button className = 'array-buttons sorting'  onClick={() => this.quickSort()}>Quick Sort</button>
-          <button className = 'array-buttons sorting'  onClick={() => this.selectionSort()}>Selection Sort</button>
-          <button className = 'array-buttons sorting'  onClick={() => this.bubbleSort()}>Bubble Sort</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.sort(getMergeSortAnimations,mergeSortAnimationHandler)}>Merge Sort</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.sort(getQuickSortAnimations,quickSortAnimationHandler)}>Quick Sort</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.sort(getSelectionSortAnimations,selectionSortAnimationHandler)}>Selection Sort</button>
+          <button className = 'array-buttons sorting'  onClick={() => this.sort(getBubbleSortAnimations,bubbleSortAnimationHandler)}>Bubble Sort</button>
           {/* <button className = 'array-buttons' disabled = {this.state.waitForClick} onClick={() => this.testSortingAlgorithms()}>
             Test Sorting Algorithms
           </button> */}
@@ -197,7 +169,7 @@ function randomIntFromInterval(min, max) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
+//USED FOR TESTING
 function arraysAreEqual(arrayOne, arrayTwo) {
   if (arrayOne.length !== arrayTwo.length) return false;
   for (let i = 0; i < arrayOne.length; i++) {
@@ -210,7 +182,6 @@ function arraysAreEqual(arrayOne, arrayTwo) {
 
 function finishedSort(length,arrayBars,animationSpeed){
   setTimeout(() => {
-    
     for(let i =0 ;i<arrayBars.length;i++){
       arrayBars[i].style.backgroundColor = constants.SUCCESS_COLOR;
     }
