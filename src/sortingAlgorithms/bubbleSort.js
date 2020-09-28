@@ -33,7 +33,6 @@ export function getBubbleSortAnimations(array) {
           //If no swaps were completed, array is sorted. Break out of loops
           if(noSwaps) break;
         }
-        console.log(animations);
         return;
     }
     //Swap function 

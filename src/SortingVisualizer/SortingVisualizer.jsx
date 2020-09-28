@@ -23,8 +23,8 @@ export default class SortingVisualizer extends React.Component {
       numOfArrayBars: 100,
       animationSpeed : 3
     };
-    this.adjustArraySize = this.adjustArraySize.bind(this);
-    this.adjustSortingSpeed = this.adjustSortingSpeed.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -46,36 +46,26 @@ export default class SortingVisualizer extends React.Component {
 
   }
 
-  adjustArraySize(e){
-    let size;
-    console.log(typeof e.target.value);
-    switch(e.target.value){
-      case 'small': size = 10;
-      break;
-      case 'medium' : size = 50;
-      break;
-      case 'large' : size = 100;
-      break;
-      default : size = 20;
+  handleSubmit(event){
+    if(event.target.name === 'size-submit'){
+      this.resetArray();
     }
-    this.setState({numOfArrayBars:size},this.resetArray);
-    
+    event.preventDefault();
+  }
+
+  handleChange(event) {
+    if(event.target.name === 'array-size'){
+      let size = parseInt(event.target.value);
+      this.setState({numOfArrayBars: size});
+    }
+    else if (event.target.name === 'array-speed'){
+      let speed = parseInt(event.target.value);
+      this.setState({animationSpeed:speed});
+    }
     
   }
 
-  adjustSortingSpeed(e){
-    let speed;
-    switch(e.target.value){
-      case 'slow': speed = 27;
-      break;
-      case 'normal' : speed = 9;
-      break;
-      case 'fast' : speed = 3;
-      break;
-      default : speed = 10;
-    }
-    this.setState({animationSpeed:speed});
-  }
+
 // //FIX BUG WITH THIS FUNCTION
 //   toggleButtons(length){
 //     this.setState({waitForClick:true});
@@ -91,7 +81,6 @@ export default class SortingVisualizer extends React.Component {
     mergeSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
     finishedSort(animations.length,arrayBars,this.state.animationSpeed);
     //this.toggleButtons(animations.length);
-
   }
 
   quickSort() {
@@ -121,9 +110,6 @@ export default class SortingVisualizer extends React.Component {
     //this.toggleButtons(animations.length);
     bubbleSortAnimationHandler(animations,arrayBars,this.state.animationSpeed);
     finishedSort(animations.length,arrayBars,this.state.animationSpeed);
-    
-    
-
   }
 
   // NOTE: This method will only work if your sorting algorithms actually return
@@ -168,24 +154,21 @@ export default class SortingVisualizer extends React.Component {
           </button> */}
         </div>
         <div className= 'array-sizes'>
-          <h4>Array Size</h4>
-          <label htmlFor="small">Small:</label>
-          <input disabled = {this.state.waitForClick} name="array-size" id="small" type="radio" value="small" onChange={this.adjustArraySize}></input>
-          <label htmlFor="medium">Medium:</label>
-          <input disabled = {this.state.waitForClick} name="array-size" id="medium" type="radio" value="medium" 
-          onChange={this.adjustArraySize}></input>
-          <label htmlFor="large">Large:</label>
-          <input disabled = {this.state.waitForClick} name="array-size" id="large" type="radio" value="large" onChange={this.adjustArraySize}></input>
+          <h4>Array Size:</h4>
+          <form name = 'size-submit' onSubmit={this.handleSubmit}>
+            <label htmlFor="array-size"></label>
+            <input  name="array-size" id="array-size" type="number" value= {this.state.numOfArrayBars} min="2.00" max = "100.00" step="1.00" onChange={this.handleChange}></input>
+            <input type="submit" value="Submit" />
+          </form>
+         
         </div>
         <div className = 'array-sorting-speeds'>
           <h4>Sorting Speeds</h4>
-          <label htmlFor="slow">Slow:</label>
-          <input disabled = {this.state.waitForClick} name="sorting-speed" id="slow" type="radio" value="slow" onChange={this.adjustSortingSpeed}></input>
-          <label htmlFor="normal">Normal:</label>
-          <input disabled = {this.state.waitForClick} name="sorting-speed" id="normal" type="radio" value="normal" 
-          onChange={this.adjustSortingSpeed}></input>
-          <label htmlFor="fast">Fast:</label>
-          <input disabled = {this.state.waitForClick} name="sorting-speed" id="fast" type="radio" value="fast" onChange={this.adjustSortingSpeed}></input>
+          <form name = 'speed-submit' onSubmit={this.handleSubmit}>
+            <label htmlFor="array-speed"></label>
+            <input  name="array-speed" id="array-speed" type="number" value= {this.state.animationSpeed} min="1.00" max = "27.00" step="1.00" onChange={this.handleChange}></input>
+            <input type="submit" value="Submit" />
+          </form>
         </div>
       </div>
     );
@@ -215,5 +198,5 @@ function finishedSort(length,arrayBars,animationSpeed){
       arrayBars[i].style.backgroundColor = constants.SUCCESS_COLOR;
     }
     //Delay until end of sorting plus additional delay to extend past the end of the sorting algorithms. Delay must be adjusted by animationSpeed/3 to account for the changes in speeds
-  },(animationSpeed) *(length));
+  },(animationSpeed *length)+constants.ADDED_DELAY);
 }
