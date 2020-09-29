@@ -6,6 +6,7 @@ The purpose of this application is to provide a visual representation of sorting
 
 ## Notable Features
 **Visualization :** This application allows the user to understand sorting algorithms by providing animations for each step in the algorithmic process.
+
 **Button Disable/Enable :** Once the user selects an algorithm, all buttons on the DOM are disabled. This prevents the user from creating a new array or starting a new sorting method in the middle of another method. All buttons are enabled after the sort is finished.
 
 ### Special Thanks
